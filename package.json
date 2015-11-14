@@ -1,0 +1,27 @@
+{
+  "name": "nodejs-tiddlywiki-to-md",
+  "version": "1.0.0",
+  "description": "Convert tiddlywiki tiddles to md",
+  "main": "start.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://sebastiencv@github.com/sebastiencv/nodejs-tiddlywiki-to-md.git"
+  },
+  "keywords": [
+  ],
+  "author": "sebastien cvilic",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sebastiencv/nodejs-tiddlywiki-to-md/issues"
+  },
+  "homepage": "https://github.com/sebastiencv/nodejs-tiddlywiki-to-md",
+  "dependencies": {
+    "coffee-script": "*",
+    "mkpath": "^0.1.0",
+    "walk": "^2.3.9",
+    "fs-extra": "^0.26.2"
+  }
+}
