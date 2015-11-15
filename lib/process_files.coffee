@@ -4,6 +4,7 @@ data_out = "data/out"
 fs = require "fs-extra"
 path = require "path"
 walk = require "walk"
+util = require "util"
 
 tiddly_to_md = require "./tiddly_to_md"
 
@@ -22,7 +23,7 @@ fs.emptyDir data_out, (err) ->
           if err?
             console.log "Error reading #{source_file} : #{err}"
           else
-            target_file = "#{data_out}/#{decodeURI fileStat.name}"
+            target_file = "#{data_out}/#{decodeURI fileStat.name}.md"
             content = tiddly_to_md.convert buffer.toString()
             fs.writeFile target_file, content, (err) ->
               if err?
