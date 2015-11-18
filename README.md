@@ -26,7 +26,7 @@ node start
 
 [More details](more.md)
 
-[More 2 details](more 2.md)
+[More 2 details](more%202.md)
 
 # Tools for iPhone
 
