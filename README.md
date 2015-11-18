@@ -26,6 +26,8 @@ node start
 
 [More details](more.md)
 
+[More 2 details](more 2.md)
+
 # Tools for iPhone
 
 * Editorials : http://omz-software.com/editorial/
