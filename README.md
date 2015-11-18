@@ -24,6 +24,12 @@ node start
 | `<x-tex>\sqrt{E[(\mathbf{x}-\mu_x)^2]}</x-tex>` | $\sqrt{E[(\mathbf{x}-\mu_x)^2]}$ |
 | `<<img src:"media/ai/rs/800px-correlation_examples.png" width:200 align:right>>` | <img style="border: 0px none; float: right; margin: 0px;0px 0px 1.5em;width:200px" src="data/media/ai/rs/800px-correlation_examples.png"> |
 
+[More details](more.md)
+
 # Tools for iPhone
 
 * Editorials : http://omz-software.com/editorial/
+
+# Math library
+
+* http://khan.github.io/KaTeX/
