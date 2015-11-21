@@ -28,6 +28,10 @@ node start
 
 [More 2 details](more%202.md)
 
+# OSX editor
+
+* MacDown http://macdown.uranusjr.com/, https://github.com/uranusjr/macdown
+
 # Tools for iPhone
 
 * Editorials : http://omz-software.com/editorial/
@@ -35,3 +39,15 @@ node start
 # Math library
 
 * http://khan.github.io/KaTeX/
+
+# Analysis of atom/markdown-preview
+
+* https://github.com/atom/markdown-preview/blob/master/package.json
+
+## Rendering
+
+* Two triggers in `lib/main.coffee` :
+  * via `atom.workspace.addOpener` in case of opening a file
+    * in `lib/markdown-preview-view.coffee` : `renderer.toDOMFragment text, @getPath(), @getGrammar()`
+      * in `lib/renderer.coffee` : 
+  * via toggle that call back `atom.workspace.open(...)`

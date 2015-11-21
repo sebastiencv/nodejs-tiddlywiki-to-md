@@ -5,7 +5,7 @@ convert = (content) ->
 
 prepare_content = (content) ->
   # replace all new lines in math by a space
-  content = content.replace /<x-tex>([\s\S]*?)<\/x-tex>/gi, (match, p1) -> "$#{p1.replace(/\n/g, " ").replace(/\|/g, "¦").trim()}$"
+  content = content.replace /<x-tex[^>]*?>([\s\S]*?)<\/x-tex>/gi, (match, p1) -> "$#{p1.replace(/\n/g, " ").replace(/\|/g, "¦").trim()}$"
   content
 
 process_chunks = (chunks) ->
@@ -58,21 +58,29 @@ process_format = (text) ->
   text = text.replace /''([\s\S]*?)''/gi, (match, p1) -> "**#{p1.trim()}**"
   # italic : use italic for personnal notes
   text = text.replace /::([\s\S]*?)::/gi, (match, p1) -> "*#{p1.trim()}*"
+  text = text.replace /(^|[^:])\/\/([\s\S]*?)\/\//gi, (match, p1, p2) -> p2.trim()
   # underscore
   text = text.replace /__([\s\S]*?)__/gi, (match, p1) -> "<u>#{p1.trim()}</u>"
   # superscript
-  text = text.replace /\^\^([\s\S]*?)\^\^/gi, (match, p1) -> "<sup>#{p1.trim()}</sup>"
-  text = text.replace /\(\(([\s\S]*?)\)\)/gi, (match, p1) -> "<sup>#{p1.trim()}</sup>"
+  text = text.replace /\^\^([\s\S]*?)\^\^/gi, (match, p1) -> "^#{p1.trim()}^"
+  # footnotes
+  text = text.replace /\(\(([\s\S]*?)\)\)/gi, (match, p1) -> "^[#{p1.trim()}]"
   # subscript
-  text = text.replace /,,([\s\S]*?),,/gi, (match, p1) -> "<sub>#{p1}</sub>"
+  text = text.replace /,,([\s\S]*?),,/gi, (match, p1) -> "~#{p1}~"
+  # remove tcc
+  text = text.replace /\{tcc[^\}]*\}/gi, ""
+  # replace links
+  text = text.replace /\[\[[^\]\|]*\|([^\]]*)\|([^\]]*)\|[^\]]*\]\]/gi, (match, p1, p2) -> "[#{p1}](#{encodeURIComponent p2}.md)"
+  text = text.replace /\[\[([^\]\|]*)\|([^\]]*)\]\]/gi, (match, p1, p2) -> "[#{p1}](#{encodeURIComponent p2}.md)"
+  text = text.replace /\[\[([^\]]*)\]\]/gi, (match, p1) -> "[#{p1}](#{encodeURIComponent p1}.md)"
   # image
-  text = text.replace /<<img ([^>]*)>>/g, (match, p1) ->
+  text = text.replace /<<?img ([^>]*)>?>/g, (match, p1) ->
     # find attributes
-    match = p1.match /src:"([^"]*?)"/
+    match = p1.match /src[:=]"([^"]*?)"/
     src = if match? then match[1] else ""
-    match = p1.match /width:([^ >]*)/
+    match = p1.match /width[:=]([^ >]*)/
     width = if match? then "width: #{parseInt match[1]}px;" else ""
-    match = p1.match /align:([^ >]*)/
+    match = p1.match /align[:=]([^ >]*)/
     align = if match? then "float: #{match[1]};" else ""
     # copy the image
     source = "data/#{src}"
@@ -168,31 +176,6 @@ split_in_chunks = (content) ->
   # return chunks
   chunks
 
-
-convert_ = (content) ->
-  # bold
-  # search for a lazy block of chars ([\s\S]*?) between '' '', but not in a code blocl `` ``
-  content = content.replace /(```[^(`)]+```)|''([\s\S]*?)''/gi, (match, p1, p2) -> if p2? then "**#{p2}**" else p1
-  # italic
-  content = content.replace /(```[^(`)]+```)|\/\/([\s\S]*?)\/\//gi, (match, p1, p2) -> if p2? then "*#{p2}*" else p1
-  # underscore
-  content = content.replace /(```[^(`)]+```)|__([\s\S]*?)__/gi, (match, p1, p2) -> if p2? then "<u>#{p2}</u>" else p1
-  # superscript
-  content = content.replace /(```[^(`)]+```)|\^\^([\s\S]*?)\^\^/gi, (match, p1, p2) -> if p2? then "<sup>#{p2}</sup>" else p1
-  content = content.replace /(```[^(`)]+```)|\(\(([\s\S]*?)\)\)/gi, (match, p1, p2) -> if p2? then "<sup>#{p2}</sup>" else p1
-  # subscript
-  content = content.replace /(```[^(`)]+```)|,,([\s\S]*?),,/gi, (match, p1, p2) -> if p2? then "<sub>#{p2}</sub>" else p1
-  # math
-  # search lazy block of chars between <x-tex> and </x-tex>
-  content = content.replace /<x-tex>([\s\S]*?)<\/x-tex>/gi, (match, p1) -> "$#{p1.trim().replace /\|/g, "¦"}$"
-  # remove new lines in tables
-  content = content.replace /<(\/)?br>/gi, " "
-  # add header separator in tables
-  # search line of |...|...| between new lines (\n) and preceeded by a non table row -> return the first line of table
-  content = content.replace /[^\|]\n(\|[\s\S]*?\|)\n(\|[\s\S]*?\|\n)?/gmi, (match, p1, p2) ->
-    # check is not already a header separator
-    console.log p1, p2
-  content
 
 exports.convert = (content) ->
   convert content
