@@ -70,9 +70,9 @@ process_format = (text) ->
   # remove tcc
   text = text.replace /\{tcc[^\}]*\}/gi, ""
   # replace links
-  text = text.replace /\[\[[^\]\|]*\|([^\]]*)\|([^\]]*)\|[^\]]*\]\]/gi, (match, p1, p2) -> "[#{p1}](#{encodeURIComponent p2}.md)"
-  text = text.replace /\[\[([^\]\|]*)\|([^\]]*)\]\]/gi, (match, p1, p2) -> "[#{p1}](#{encodeURIComponent p2}.md)"
-  text = text.replace /\[\[([^\]]*)\]\]/gi, (match, p1) -> "[#{p1}](#{encodeURIComponent p1}.md)"
+  text = text.replace /\[\[[^\]\|]*\|([^\]]*)\|([^\]]*)\|[^\]]*\]\]/gi, (match, p1, p2) -> "[#{p1}](#{encodeURIComponent(p2).replace /\//g, "_"}.md)"
+  text = text.replace /\[\[([^\]\|]*)\|([^\]]*)\]\]/gi, (match, p1, p2) -> "[#{p1}](#{encodeURIComponent(p2).replace /\//g, "_"}.md)"
+  text = text.replace /\[\[([^\]]*)\]\]/gi, (match, p1) -> "[#{p1}](#{encodeURIComponent(p1).replace /\//g, "_"}.md)"
   # image
   text = text.replace /<<?img ([^>]*)>?>/g, (match, p1) ->
     # find attributes

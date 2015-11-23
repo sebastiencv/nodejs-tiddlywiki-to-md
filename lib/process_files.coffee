@@ -23,10 +23,9 @@ fs.emptyDir data_out, (err) ->
           if err?
             console.log "Error reading #{source_file} : #{err}"
           else
-            target_file = "#{data_out}/#{decodeURI fileStat.name}.md"
+            target_file = "#{data_out}/#{decodeURIComponent(fileStat.name).replace /\//g, "_"}.md"
             content = tiddly_to_md.convert buffer.toString()
             fs.writeFile target_file, content, (err) ->
               if err?
                 console.log "Error saving #{target_file} : #{err}"
-              else
-                next()
+              next()
